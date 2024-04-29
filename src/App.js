@@ -16,7 +16,7 @@ import Diomand from "./Admin/Diomand.jsx"
 import Forgot from './Header/Forgot';
 import OTP from './Header/Otp';
 import ListCatogaryDiomand from "./Admin/ListCatogaryDiomand"
-
+import NewPassword from "./Header/New-Password.jsx"
 import AddProduct from "./Admin/AddProduct";
 import AddCatogary from "./Admin/AddCatogary"
 
@@ -25,6 +25,8 @@ import AddCatogary from "./Admin/AddCatogary"
 import ListCatogary from "./Admin/ListCatogary"
 import Addmanues from "./Admin/Addmanues"
 import AddSlider from './Admin/AddSlider';
+import Login from './Header/Auth/Login.jsx';
+import Register from './Header/Auth/Register.jsx';
 
 
 
@@ -38,6 +40,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/shop' element={<Shop />} />
+        <Route path='/Login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
         <Route path='/Wishlist' element={<Wishlist />} />
         <Route path='/ViewCard' element={<ViewCard />} />
         <Route path='/CheckOut' element={<CheckOut />} />
@@ -47,6 +51,7 @@ function App() {
         <Route path='/Ring' element={<Ring />} />
         <Route path='/forgot' element={<Forgot />} />
         <Route path='/otp' element={<OTP />} />
+        <Route path='/reset-password' element={<NewPassword />} />
 
         
         {/* AdminDash route */}
