@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { Link,useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
@@ -9,7 +9,7 @@ function Register() {
     email: '',
     password: ''
   });
-
+const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,10 +20,12 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate("/otpVerify")
     axios.post('http://localhost:6001/api/v1/register', formData)
       .then(response => {
         console.log('Registration successful:', response.data);
         toast.success('Registration successful');
+   
       })
       .catch(error => {
         console.error('Registration failed:', error);

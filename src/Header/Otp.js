@@ -29,12 +29,12 @@ function OTP() {
 
   return (
     <div className="container mx-auto">
-      <h2 className="text-center font-bold text-2xl">OTP Verification</h2>
-      <p className="text-center">Please check your email for the One Time Password (OTP) and enter it below:</p>
-      <form onSubmit={handleSubmit} id="otp-form" className="mx-auto max-w-xs">
-        <div className="form-group">
-          <div className="inputfield">
-            <div className="flex">
+      <h2 className="text-center font-bold text-2xl mb-6">OTP Verification</h2>
+     
+      <form onSubmit={handleSubmit} id="otp-form" className="mx-auto max-w-xs ">
+        <div className="form-group ">
+          <div className="inputfield ">
+            <div className="flex ">
               {/* OTP input fields */}
               {[...Array(6)].map((_, index) => (
         <React.Fragment key={index}>

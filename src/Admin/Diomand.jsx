@@ -8,7 +8,7 @@ const ProductForm = () => {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [images, setImages] = useState(null);
+  // const [images, setImages] = useState([]);
   const [DiomandShape, setDiomandShape] = useState("");
 
   useEffect(() => {
@@ -40,12 +40,17 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+  
     const formData = new FormData();
     formData.append("name", name);
     formData.append("category", selectedCategory);
-    for (let i = 0; i < images.length; i++) {
-      formData.append("images", images[i]);
-    }
+  //   if (images && images.length > 0) {
+  //     for (let i = 0; i < images.length; i++) {
+  //         formData.append('images', images[i]);
+  //     }
+  // }
+
     try {
       const response = await axios.post(
         "http://localhost:6001/api/v1/AdminDash/DiomandShepa",
@@ -59,7 +64,7 @@ const ProductForm = () => {
       console.log("Product data sent to the server:", response.data);
       setName("");
       setSelectedCategory("");
-      setImages(null);
+      // setImages(null);
       alert("Product added successfully!");
     } catch (error) {
       console.error("Error sending product data:", error);
@@ -67,6 +72,7 @@ const ProductForm = () => {
     }
   };
 
+  
   return (
     <div className="flex flex-col w-full h-full justify-between">
       <div className="w-full relative p-6 border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
@@ -102,7 +108,8 @@ const ProductForm = () => {
           <form onSubmit={handleSubmit}>
             
             <div className="p-6 flex-grow scrollbar-hide w-full max-h-full pb-40">
-            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+           
+{/* <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
   <label className="block text-sm text-gray-800 dark:text-gray-400 col-span-4 sm:col-span-2 font-medium text-sm">
     Product Images
   </label>
@@ -112,30 +119,20 @@ const ProductForm = () => {
         accept="image/*,.jpeg,.jpg,.png,.webp"
         type="file"
         multiple
-        onChange={(e) => setImages(e.target.files)}
+        onChange={(e) => {
+          const files = Array.from(e.target.files);
+          setImages(files);
+        }}
         style={{ display: "none" }}
         id="imageInput"
       />
-      <label htmlFor="imageInput" className="cursor-pointer">
-        <div className="border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md px-6 pt-5 pb-6">
+      <label htmlFor="imageInput">
+        <div
+          className="border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md cursor-pointer px-6 pt-5 pb-6"
+          role="presentation"
+        >
           <span className="mx-auto flex justify-center">
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-3xl text-emerald-500"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <polyline points="16 16 12 12 8 16" />
-              <line x1={12} y1={12} x2={12} y2={21} />
-              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-              <polyline points="16 16 12 12 8 16" />
-            </svg>
+          
           </span>
           <p className="text-sm mt-2">Drag your images here or click to upload</p>
           <em className="text-xs text-gray-400">
@@ -143,15 +140,20 @@ const ProductForm = () => {
           </em>
         </div>
       </label>
-      {/* Display selected images */}
-      {/* <aside className="flex flex-row flex-wrap mt-4">
+      <div className="text-emerald-500" />
+      <aside className="flex flex-row flex-wrap mt-4">
         {images?.map((image, index) => (
-          <img key={index} src={URL.createObjectURL(image)} alt={`Product Image ${index}`} className="w-24 h-24 object-cover mr-2 mb-2 rounded-md" />
+          <img
+            key={index}
+            src={URL.createObjectURL(image)}
+            alt={`Product Image ${index}`}
+            className="w-24 h-24 object-cover mr-2 mb-2 rounded-md"
+          />
         ))}
-      </aside> */}
+      </aside>
     </div>
   </div>
-</div>
+</div> */}
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <label className="block text-sm text-gray-800 dark:text-gray-400 col-span-4 sm:col-span-2 font-medium text-sm">
                   Category
