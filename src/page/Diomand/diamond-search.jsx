@@ -12,7 +12,8 @@ function Shop() {
    const [Diomands, setProducts] = useState([]);
    const [recentlyViewClicked, setRecentlyViewClicked] = useState(false);
    const [page, setPage] = useState(1);
-   const [recentlyViewed, setRecentlyViewed] = useState(JSON.parse(localStorage.getItem('recentlyViewed')) || []);
+   const [recentlyViewed, setRecentlyViewed] = useState([]);
+   console.log("recentlyViewed",recentlyViewed)
    const handleDiamondClick = (name) => {
       setSelectedDiamond(name);
       
@@ -62,24 +63,15 @@ console.log(selectedDiamond)
    const rangeLabels = ['Good', 'Very Good', 'Excellent', 'Poor', 'Fair'];
    const rangeLabels1 = ['I1',"I2", 'SI3', 'SI2', 'SI1', 'VS1', "VS2", "VVS2", "VVS1", "IF", "FL"];
 
-   const addToRecentlyViewed = (diamond) => {
-      if (!recentlyViewed.find(item => item._id === diamond._id)) {
-         const updatedRecentlyViewed = [diamond, ...recentlyViewed];
-         setRecentlyViewed(updatedRecentlyViewed.slice(0, 5));
-         localStorage.setItem('recentlyViewed', JSON.stringify(updatedRecentlyViewed));
+   const addToRecentlyViewed = async (diamond) => {
+      try {
+         await axios.post('http://localhost:6001/api/v1/recentlyViewed', { diamond });
+      } catch (error) {
+         console.error('Error adding to recently viewed:', error);
       }
    };
 
-   const clearOldItems = () => {
-      const currentTime = new Date().getTime();
-      const updatedRecentlyViewed = recentlyViewed.filter(item => {
-         return (currentTime - item.timestamp) < (30 * 60 * 1000);
-      });
-      localStorage.setItem('recentlyViewed', JSON.stringify(updatedRecentlyViewed));
-      setRecentlyViewed(updatedRecentlyViewed);
-   };
-
-   setInterval(clearOldItems, 60 * 1000);
+   
 
 useEffect(() => {
    const fetchDataDiomand = async () => {
@@ -94,6 +86,21 @@ useEffect(() => {
    };
 
    fetchDataDiomand();
+}, []);
+
+useEffect(() => {
+   const fetchDataDiomand2 = async () => {
+      try {
+         const response = await axios.get(
+            "http://localhost:6001/api/v1/recently-viewed"
+         );
+         setRecentlyViewed(response.data.data);
+      } catch (error) {
+         console.error("Error fetching diamonds:", error);
+      }
+   };
+
+   fetchDataDiomand2();
 }, []);
    return (
       <>
