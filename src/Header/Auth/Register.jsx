@@ -1,92 +1,95 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const RegisterForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
-  const [error, setError] = useState('');
-  const [otpSent, setOtpSent] = useState(false); // Add state for OTP sent status
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post('http://localhost:6001/api/v1/register', { email, password });
-
-      if (response.data.otpSent) {
-        setOtpSent(true); // Update OTP sent status
-        setError('');
-      } else {
-        setError('Email already exists');
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again later.');
-    }
+function Register() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleVerifyOtp = async () => {
-    try {
-      const response = await axios.post('http://localhost:6001/api/v1/verifyOTP', { email, otp });
-
-      if (response.data.success) {
-        setError('');
-      } else {
-        setError('Invalid OTP');
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again later.');
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/otpVerify");
+    axios
+      .post("http://localhost:6001/api/v1/register", formData)
+      .then((response) => {
+        console.log("Registration successful:", response.data);
+        toast.success("Registration successful");
+      })
+      .catch((error) => {
+        console.error("Registration failed:", error);
+        if (error.response && error.response.status === 409) {
+          toast.error("Email already exists");
+        } else {
+          toast.error("Registration failed");
+        }
+      });
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:"20px",marginBottom:"20px" }} classnName="mb-12"  >
-      <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-        <h2>Register</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Email:
+    <div className="flex justify-center items-center mt-6 mb-6">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[336px] p-6 bg-white rounded-lg shadow-md"
+      >
+        <h2 className="text-3xl font-semibold mb-4 text-center">REGISTER</h2>
+        <div className="space-y-4">
+          <div className="email">
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md"
+              placeholder="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
-          </label>
-          <br />
-          <label>
-            Password:
+          </div>
+          <div className="password">
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md"
+              placeholder="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
-          </label>
-          <br />
-          <button type="submit" style={{ backgroundColor: '#CB8161', color: '#fff', border: 'none', padding: '4px 16px', borderRadius: '4px', cursor: 'pointer' }}>Submit</button>
-        </form>
-        {error && <div style={{ color: 'red', marginTop: '10px', marginBottom: '10px'  }}>{error}</div>}
-        {otpSent && (
-  <div>
-    <div style={{ marginTop: '20px' }} > {/* Add margin to OTP input */}
-      <label>
-        OTP:
-        <input
-          type="text"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-        />
-      </label>
-    </div>
-    <div style={{ marginTop: '10px' }}> {/* Add margin to error message */}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-    </div>
-    <button onClick={handleVerifyOtp} style={{ backgroundColor: '#CB8161', color: '#fff', border: 'none', padding: '8px 8px', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px' }}>Verify OTP</button>
-  </div>
-)}
-
-      </div>
+          </div>
+          {/* <div className="button-register">
+            <input
+              type="submit"
+              className="w-full bg-cb8161 hover:bg-cb7161 text-white font-semibold py-2 px-4 rounded-md"
+              value="Register"
+            />
+          </div> */}
+          <button
+            type="submit"
+            class="w-full bg-blue-500 hover:bg-blue-600 text-[18px] text-white font-semibold py-2 px-4 rounded-md"
+            style={{ backgroundColor: "#CB8161" }}
+          >
+            Register
+          </button>
+          <div className="button-next-login text-center text-lg">
+            <Link to="/Login">Already have an account?</Link>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
 
 export default RegisterForm;
+
+export default Register;
