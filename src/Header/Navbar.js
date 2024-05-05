@@ -7,7 +7,7 @@ function App() {
   const location = useLocation();
   const [manues, setManues] = useState([]);
   const [subManues,setSubManues] =  useState([]);
-  const [ManyManues,setManyManues]=useState([])
+  // const [ManyManues,setManyManues]=useState([])
   const [showLoginBox, setShowLoginBox] = useState(true);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -77,23 +77,23 @@ function App() {
 
     fetchMenues1();
   }, []);
-  useEffect(() => {
-    const fetchMenues = async () => {
-      try {
-        const response = await axios.get("http://localhost:6001/api/v1/getSubmanuesMany", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setManyManues(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMenues = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:6001/api/v1/getSubmanuesMany", {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+  //       setManyManues(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
 
-    fetchMenues();
-  }, []);
+  //   fetchMenues();
+  // }, []);
   
   return (
     <>
@@ -162,50 +162,53 @@ function App() {
           <div className="header-middle text-center color-white">
             {/* Navigation */}
             <div className="site-navigation">
-  <nav id="main-navigation">
-    <ul id="menu-main-menu" className="menu">
-      {manues.map((item) => (
-        <li
-          key={item.id}
-          className={`level-0 menu-item menu-item-has-children ${
-            activeSubmenu === item._id ? 'current-menu-item' : ''
-          }`}
-          onMouseEnter={() => handleMouseEnter(item._id)}
-          onMouseLeave={handleMouseLeave}
+            <nav id="main-navigation">
+  <ul id="menu-main-menu" className="menu">
+    {manues.map((item) => (
+      <li
+        key={item.id}
+        className={`level-0 menu-item menu-item-has-children ${
+          activeSubmenu === item._id ? 'current-menu-item' : ''
+        }`}
+        onMouseEnter={() => handleMouseEnter(item._id)}
+        onMouseLeave={handleMouseLeave}
+        style={{ position: 'relative' }} // Add relative positioning
+      >
+        <Link
+          to={item.name}
+          className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
         >
-          <Link
-            to={item.name}
-            className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
-          >
-            {item.name}
-          </Link>
-          {activeSubmenu === item._id && subManues && subManues.length > 0 && (
-            <ul className="submenu">
-              {/* Render regular submenu items */}
-              {subManues
-  .filter((subItem) => subItem.mainMenuId._id === item._id)
-  .map((subItem) => (
-    <li key={subItem.id} className="submenu-item">
-      <Link to={subItem.link}>{subItem.name}</Link>
-    </li>
-  ))}
-   
-{/* {ManyManues
-  .filter((subMany) => subMany.subMenuId._id === item._id)
-  .map((subMany) => (
-    subMany.SubMenuItems.map((subitemMany) => (
-      <li key={subitemMany.id} className="submenu-item">
-        <Link to={subitemMany.link}>{subitemMany.name}</Link>
+          {item.name}
+        </Link>
+        {activeSubmenu === item._id && subManues && subManues.length > 0 && (
+       <ul className="submenu text-xl bg-gray-200 bg-opacity-75 text-white absolute left-0 mt-2 w-full px-0" style={{ width: "300px" }}>
+       {/* Adjust width and remove padding */}
+         {/* Render regular submenu items */}
+         {subManues
+           .filter((subItem) => subItem.mainMenuId._id === item._id)
+           .map((subItem) => (
+             <li key={subItem.id} className="submenu-item">
+               <Link to={subItem.link}>{subItem.name}</Link>
+             </li>
+           ))}
+         {/* Render submenu items from ManyManues */}
+         {/* {ManyManues
+           .filter((subMany) => subMany.subMenuId._id === item._id)
+           .map((subMany) => (
+             subMany.SubMenuItems.map((subitemMany) => (
+               <li key={subitemMany.id} className="submenu-item">
+                 <Link to={subitemMany.link}>{subitemMany.name}</Link>
+               </li>
+             ))
+           ))} */}
+       </ul>
+        )}
       </li>
-    ))
-  ))} */}
-   
-            </ul>
-          )}
-        </li>
-      ))}
-    </ul>
-  </nav>
+    ))}
+  </ul>
+</nav>
+
+
 </div>
 
           </div>

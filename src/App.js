@@ -45,7 +45,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/shop' element={<Shop />} />
-        <Route path='/DaymandSherch' element={<DaymandSherch />} />
+        <Route path='/Diomand' element={<DaymandSherch />} />
         <Route path='/single/:id' element={<SingleProduct />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/register' element={<Register />} />
