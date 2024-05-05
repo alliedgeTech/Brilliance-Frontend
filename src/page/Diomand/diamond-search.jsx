@@ -2,7 +2,7 @@ import '../../App.css';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Slider from 'react-slider';
+// import Slider from 'react-slider';
 const MIN_DEFAULT = 150;
 const MAX_DEFAULT = 5000;
 function Shop() {
