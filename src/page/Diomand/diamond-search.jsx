@@ -15,7 +15,7 @@ function Shop() {
    const [recentlyViewed, setRecentlyViewed] = useState([]);
    
    const [CompareView, seteCompareView] = useState([]);
-   const [showHello, setShowHello] = useState(false); // Define showHello state
+   const [showHello, setShowHello] = useState(false); 
    
    
    console.log("CompareView",CompareView)
@@ -30,8 +30,7 @@ function Shop() {
         const response = await axios.get(
            `http://localhost:6001/api/v1/getAllDiamonds?page=${page}&clarity=${selectedClarity.join(',')}&cut=${selectedCut.join(',')}`
         );
-        // If the current page is 1, replace the existing data
-        // Otherwise, append the newly fetched products to the existing list
+     
         setProducts(prevProducts => page === 1 ? response.data.data : [...prevProducts, ...response.data.data]);
      } catch (error) {
         console.error("Error fetching diamonds:", error);
@@ -337,7 +336,7 @@ function Shop() {
         setShowHello(false);
       }}
     >
-      Diamonds (0)
+      Diamonds ({Diomands.length})
     </button>
   </div>
   <div className="bg-white py-2 px-4 rounded-md shadow-md">
@@ -377,57 +376,43 @@ function Shop() {
                       <div className="products-list grid">
                         <div className="row">
                           {recentlyViewClicked ? (
-                            <div className='row'>
-                              {/* Display recently viewed products */}
-                              <h2>Recently Viewed</h2>
-                                      
-                              {recentlyViewed.length > 0 && recentlyViewed.map((item, index) => (
-  <div
-    className="col-lg-3 col-md-4 col-sm-6 col-12"
-    key={index}
-  >
-    <div className="products-entry clearfix product-wapper shadow-md h-full">
-      <Link
-        to={`/single/${item.diamond._id}`}
-        onClick={() => addToRecentlyViewed(item.diamond)}
-      >
-        <div className="products-thumb h-full">
-          <div className="image-container h-48 flex items-center justify-center">
-            {item.diamond.images && (
-              <img
-                src={`http://localhost:6001/uploads/${item.diamond.images[0]}`}
-                className="post-image object-contain"
-                alt=""
-              />
-            )}
-          </div>
-          <div className="products-content p-4">
-            <div className="contents text-center">
-              <div className="rating">
-                <span className="count">
-                  {item.diamond.shape}
-                </span>
-              </div>
-              <h3 className="product-title">
-                <a href="shop-details.html">
-                  {item.diamond.productName}
-                </a>
-              </h3>
-              <span className="price">
-                Price : {item.diamond.price}
-              </span>
-            </div>
-          </div>
-        </div>
-      </Link>
-    </div>
-  </div>
-))}
-
-
-
-                              
-                            </div>
+                                            <div className="mt-2 flex flex-col">
+                                            <div className="-my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
+                                              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                                                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                                                  <table className="min-w-full divide-y divide-gray-200">
+                                                    <thead className="bg-gray-50 text-xl">
+                                                    <th>Image</th>
+                                                    <th>shape</th>
+                                                    <th>clarity</th>
+                                                    <th>cut</th>
+                                                    <th>Price</th>
+                                                    <th>Detiles</th>
+                                                   
+                                    
+                                                    </thead>
+                                                    <tbody className="bg-white divide-y divide-gray-200 text-xl">
+                                      {recentlyViewed.map((item, index) => (
+                                        <tr key={index}>
+                                          <td>{item.diamond.images[0]}</td>
+                                          <td>{item.diamond.shape}</td>
+                                          <td>{item.diamond.clarity}</td>
+                                          <td>{item.diamond.cut}</td>
+                                          <td>{item.diamond.price}</td>
+                                         <td> <Link
+                                                                        to={`/single/${item.diamond._id}`}
+                                                                        onClick={() => addToRecentlyViewed(item.diamond)}
+                                                                      >Detiles</Link></td>
+                                          
+                                    
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
                           ) : showHello ? (
                             // Render Hello
                             <div className="mt-2 flex flex-col">
@@ -468,47 +453,43 @@ function Shop() {
         </div>
       </div>
                           ) : selectedDiamond ? (
-                            Diomands.map((diamond, index) => (
-                              <div
-                                className="col-xl-3 col-lg-3 col-md-4 col-sm-6"
-                                key={index}
-                              >
-                                <div className="products-entry clearfix product-wapper shadow-md h-full">
-                                  <Link
-                                    to={`/single/${diamond._id}`}
-                                    onClick={() => addToRecentlyViewed(diamond)}
-                                  >
-                                    <div className="products-thumb h-full">
-                                      <div className="image-container h-48 flex items-center justify-center">
-                                        <img
-                                          src={`http://localhost:6001/uploads/${diamond.images[0]}`}
-                                          className="post-image object-contain"
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div className="products-content p-4">
-                                        <div className="contents text-center">
-                                          <div className="rating">
-                                            <span className="count">
-                                              {diamond.shape}
-                                            </span>
+                            // <div className="scrollable-container" style={{ overflowY: 'auto' ,maxHeight: '500px', }}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                              {Diomands.map((diamond, index) => (
+                                <div key={index} className="col-span-1">
+                                  <div className="products-entry clearfix product-wapper shadow-md h-full">
+                                    <Link
+                                      to={`/single/${diamond._id}`}
+                                      onClick={() => addToRecentlyViewed(diamond)}
+                                    >
+                                      <div className="products-thumb h-full">
+                                        <div className="image-container h-48 flex items-center justify-center">
+                                          <img
+                                            src={`http://localhost:6001/uploads/${diamond.images[0]}`}
+                                            className="post-image object-contain"
+                                            alt=""
+                                          />
+                                        </div>
+                                        <div className="products-content p-4">
+                                          <div className="contents text-center">
+                                            <div className="rating">
+                                              <span className="count">{diamond.shape}</span>
+                                            </div>
+                                            <h3 className="product-title">
+                                              <a href="shop-details.html">{diamond.productName}</a>
+                                            </h3>
+                                            <span className="price">Price: {diamond.price}</span>
                                           </div>
-                                          <h3 className="product-title">
-                                            <a href="shop-details.html">
-                                              {" "}
-                                              {diamond.productName}{" "}
-                                            </a>
-                                          </h3>
-                                          <span className="price">
-                                            Price : {diamond.price}
-                                          </span>
                                         </div>
                                       </div>
-                                    </div>
-                                  </Link>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            ))
+                              ))}
+                            </div>
+                          // </div>
+                          
+                          
                           ) : null}
                         </div>
                       </div>
