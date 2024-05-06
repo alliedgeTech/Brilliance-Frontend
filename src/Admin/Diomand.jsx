@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DiomandShape1 from "./DiomandShape"
+import DiomandShape1 from "./DiomandShape";
 
 const ProductForm = () => {
   const [name, setName] = useState("");
@@ -40,16 +40,15 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-  
+
     const formData = new FormData();
     formData.append("name", name);
     formData.append("category", selectedCategory);
-  //   if (images && images.length > 0) {
-  //     for (let i = 0; i < images.length; i++) {
-  //         formData.append('images', images[i]);
-  //     }
-  // }
+    //   if (images && images.length > 0) {
+    //     for (let i = 0; i < images.length; i++) {
+    //         formData.append('images', images[i]);
+    //     }
+    // }
 
     try {
       const response = await axios.post(
@@ -72,7 +71,6 @@ const ProductForm = () => {
     }
   };
 
-  
   return (
     <div className="flex flex-col w-full h-full justify-between">
       <div className="w-full relative p-6 border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
@@ -106,10 +104,8 @@ const ProductForm = () => {
           }}
         >
           <form onSubmit={handleSubmit}>
-            
             <div className="p-6 flex-grow scrollbar-hide w-full max-h-full pb-40">
-           
-{/* <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
+              {/* <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
   <label className="block text-sm text-gray-800 dark:text-gray-400 col-span-4 sm:col-span-2 font-medium text-sm">
     Product Images
   </label>
@@ -189,7 +185,7 @@ const ProductForm = () => {
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
-       
+
                 <div className="flex-grow-0 md:flex-grow lg:flex-grow xl:flex-grow">
                   <button
                     className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-emerald-500 border border-transparent active:bg-emerald-600 hover:bg-emerald-600 w-full h-12"
@@ -203,7 +199,6 @@ const ProductForm = () => {
           </form>
 
           <DiomandShape1 diomandShape={DiomandShape} />
-          
         </div>
       </div>
     </div>
