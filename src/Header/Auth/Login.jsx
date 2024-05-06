@@ -66,7 +66,7 @@ function Login() {
   return (
     <>
       <form
-        className="mx-auto w-1/4 p-6 bg-white rounded-lg shadow-md my-6"
+        className="mx-auto w-1/4 p-6 bg-white rounded-lg shadow-md sm:my-4 my-6 min-w-[300px]"
         onSubmit={handleLoginSubmit}
       >
         <h2 className="text-center text-4xl font-semibold mb-6">Log in</h2>
