@@ -1,8 +1,8 @@
-import './slider.css'; 
+import "./slider.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Slider from 'react-slider';
+import Slider from "react-slider";
 const MIN_DEFAULT = 150;
 const MAX_DEFAULT = 5000;
 function Shop() {
@@ -49,38 +49,37 @@ function Shop() {
   };
 
   const handleMinChange = (e) => {
-   const newMinValue = parseInt(e.target.value);
-   if (!isNaN(newMinValue) && newMinValue <= maxValue) {
-     setMinValue(newMinValue);
-     setSliderValues([newMinValue, sliderValues[1]]);
-   }
- };
+    const newMinValue = parseInt(e.target.value);
+    if (!isNaN(newMinValue) && newMinValue <= maxValue) {
+      setMinValue(newMinValue);
+      setSliderValues([newMinValue, sliderValues[1]]);
+    }
+  };
 
-   
   const handleMaxChange = (e) => {
-   const newMaxValue = parseInt(e.target.value);
-   if (!isNaN(newMaxValue) && newMaxValue >= minValue) {
-     setMaxValue(newMaxValue);
-     setSliderValues([sliderValues[0], newMaxValue]);
-   }
- };
+    const newMaxValue = parseInt(e.target.value);
+    if (!isNaN(newMaxValue) && newMaxValue >= minValue) {
+      setMaxValue(newMaxValue);
+      setSliderValues([sliderValues[0], newMaxValue]);
+    }
+  };
 
- const handleSliderChange = (values) => {
-   setSliderValues(values);
-   setMinValue(values[0]);
-   setMaxValue(values[1]);
- };
+  const handleSliderChange = (values) => {
+    setSliderValues(values);
+    setMinValue(values[0]);
+    setMaxValue(values[1]);
+  };
 
- const handleSliderWithLabel = (props) => {
-   const { value, dragging, index, ...restProps } = props;
-   return (
-     <div className="slider-handle" {...restProps}>
-       <div className="slider-label">
-         {index === 0 ? `$${minValue}` : `$${maxValue}`}
-       </div>
-     </div>
-   );
- };
+  const handleSliderWithLabel = (props) => {
+    const { value, dragging, index, ...restProps } = props;
+    return (
+      <div className="slider-handle" {...restProps}>
+        <div className="slider-label">
+          {index === 0 ? `$${minValue}` : `$${maxValue}`}
+        </div>
+      </div>
+    );
+  };
   const updateMaxPrice = (value) => {
     const newMaxPrice = value <= 150 ? 150 : value >= 5000 ? 5000 : value;
     setMaxPrice(newMaxPrice);
@@ -97,8 +96,6 @@ function Shop() {
     setCurrentPrice(maxPrice);
   }, [maxPrice]);
 
-
-  
   const handleClarityChange = (e) => {
     const { value } = e.target;
     if (selectedClarity.includes(value)) {
@@ -216,29 +213,43 @@ function Shop() {
                   </div>
                   {/* Price Filter Block */}
                   <div className="block block-product-filter">
-  <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
-    <label
-      htmlFor="max-price"
-      className="block text-gray-700 font-bold mb-2"
-    >
-      Price
-    </label>
-    
+                    <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
+                      <label
+                        htmlFor="max-price"
+                        className="block text-gray-700 font-bold mb-2"
+                      >
+                        Price
+                      </label>
 
-   <Slider className={"slider"} onChange={handleSliderChange} value={sliderValues} min={MIN_DEFAULT} max={MAX_DEFAULT}
-   
-   />
-   <div className="flex justify-between text-gray-500">
-   <span>
-            $<input type="number" value={minValue} onChange={handleMinChange} />
-          </span>
-          <span style={{  }}>
-            $<input type="number" value={maxValue} onChange={handleMaxChange} />
-          </span>
-    </div>
-   
-  </div>
-</div>
+                      <Slider
+                        className={"slider"}
+                        onChange={handleSliderChange}
+                        value={sliderValues}
+                        min={MIN_DEFAULT}
+                        max={MAX_DEFAULT}
+                      />
+                      <div className="flex justify-between text-gray-500">
+                      <span className="flex-grow"> {/* Added flex-grow */}
+                          $
+                          <input
+                            type="number"
+                            value={minValue}
+                            onChange={handleMinChange}
+                            className="w-full"
+                          />
+                        </span>
+                        <span className="flex-grow text-right">
+                          $
+                          <input
+                            type="number"
+                            value={maxValue}
+                            onChange={handleMaxChange}
+                            className="w-full"
+                          />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                   {/* Clarity Filter Block */}
                   <div className="block block-product-filter clearfix">
                     <div className="block-title">

@@ -47,10 +47,5 @@
     position: relative;
   }
   
-  .slider-end-input {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    transform: translate(-100%, 50%);
-  }
+
   
