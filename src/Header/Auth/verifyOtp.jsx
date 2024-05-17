@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import axios from 'axios';
+import CallFor from '../../API/CallFor';
+import ApiList from '../../API/AllApiList';
+
+
 function VerifyOtp() {
     const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']); 
 
@@ -11,30 +14,23 @@ function VerifyOtp() {
 
     const verifyOtp = () => {
         const otp = otpValues.join(''); 
-    
-   
-        const apiUrl = 'http://localhost:6001/api/v1/verifyOTP';
-    
-       
-        axios.post(apiUrl, { otp })
+        const { verifyOTPApi } = ApiList;
+
+        CallFor(verifyOTPApi, 'POST', { otp })
             .then(response => {
-            
                 console.log('OTP verification successful');
             })
             .catch(error => {
-          
                 if (error.response) {
-                  
                     console.error('Error verifying OTP:', error.response.data);
                 } else if (error.request) {
-                  
                     console.error('No response received:', error.request);
                 } else {
-                   
                     console.error('Request error:', error.message);
                 }
             });
     };
+
     return (
         <>
             <div className="max-w-md mx-auto border max-w-sm mt-20 rounded mb-10">
