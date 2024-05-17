@@ -16,7 +16,7 @@ function Shop() {
    const [CompareView, seteCompareView] = useState([]);
    const [showHello, setShowHello] = useState(false); 
    
-  
+  console.log("recentlyViewed",recentlyViewed)
    const handleDiamondClick = (name) => {
       setSelectedDiamond(name);
   };
@@ -397,6 +397,7 @@ function Shop() {
                                           <td>{item.diamond.price}</td>
                                          <td> <Link
                                                                         to={`/single/${item.diamond._id}`}
+                                                                        
                                                                         onClick={() => addToRecentlyViewed(item.diamond)}
                                                                       >Detiles</Link></td>
                                           

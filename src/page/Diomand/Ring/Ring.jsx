@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 function Shop() {
-
-
+  const location = useLocation();
+  
+  const [ringData, setRings] = useState(location.state && location.state.ringData);
+ 
   const [Diomands, setDiamonds] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false);
@@ -120,7 +122,14 @@ useEffect(() => {
                       <h2>Filter</h2>
                     </div>
    
-
+                    <h2>Engagement Page</h2>
+      {ringData && (
+        <div>
+         
+          <p>{ringData._id}</p>
+          
+        </div>
+      )}
 <div className="relative">
       <button
         className="bg-gray-200 px-4 py-2 rounded-md text-gray-700 hover:bg-gray-300"
@@ -242,34 +251,36 @@ useEffect(() => {
                               {Diomands.map((diamond, index) => (
                                 <div key={index} className="col-span-1">
                                   <div className="products-entry clearfix product-wapper shadow-md h-full">
-                                    <Link to={`/single/${diamond._id}`}>
-                                      <div className="products-thumb h-full">
-                                        <div className="image-container h-48 flex items-center justify-center">
-                                          <img
-                                            src={`http://localhost:6001/uploads/${diamond.images[0]}`}
-                                            className="post-image object-contain"
-                                            alt=""
-                                          />
-                                        </div>
-                                        <div className="products-content p-4">
-                                          <div className="contents text-center">
-                                            <div className="rating">
-                                              <span className="count">
-                                                {diamond.shape}
-                                              </span>
-                                            </div>
-                                            <h3 className="product-title">
-                                              <a href="shop-details.html">
-                                                {diamond.productName}
-                                              </a>
-                                            </h3>
-                                            <span className="price">
-                                              Price: {diamond.price}
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </Link>
+                                    <Link to={{ pathname: `/singleRing/${diamond._id}`, state: { ringData }  }}>
+
+    <div className="products-thumb h-full">
+      <div className="image-container h-48 flex items-center justify-center">
+        <img
+          src={`http://localhost:6001/uploads/${diamond.images[0]}`}
+          className="post-image object-contain"
+          alt=""
+        />
+      </div>
+      <div className="products-content p-4">
+        <div className="contents text-center">
+          <div className="rating">
+            <span className="count">
+              {diamond.shape}
+            </span>
+          </div>
+          <h3 className="product-title">
+            <a href="shop-details.html">
+              {diamond.productName}
+            </a>
+          </h3>
+          <span className="price">
+            Price: {diamond.price}
+          </span>
+        </div>
+      </div>
+    </div>
+  </Link>
+
                                   </div>
                                 </div>
                               ))}

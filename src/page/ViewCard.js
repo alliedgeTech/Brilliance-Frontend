@@ -1,200 +1,122 @@
-function ViewCard(){
-    return(<>
-    <>
-    <div id="page" className="hfeed page-wrapper">
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-  <div id="site-main" className="site-main">
-    <div id="main-content" className="main-content">
-      <div id="primary" className="content-area">
-        <div id="title" className="page-title">
-          <div className="section-container">
-            <div className="content-title-heading">
-              <h1 className="text-title-heading">Shopping Cart</h1>
-            </div>
-            <div className="breadcrumbs">
-              <a href="index-2.html">Home</a>
-              <span className="delimiter" />
-              <a href="shop-grid-left.html">Shop</a>
-              <span className="delimiter" />
-              Shopping Cart
-            </div>
-          </div>
-        </div>
-        <div id="content" className="site-content" role="main">
-          <div className="section-padding">
-            <div className="section-container p-l-r">
-              <div className="shop-cart">
-                <div className="row">
-                  <div className="col-xl-8 col-lg-12 col-md-12 col-12">
-                    <form className="cart-form" action="#" method="post">
-                      <div className="table-responsive">
-                        <table className="cart-items table" cellSpacing={0}>
-                          <thead>
-                            <tr>
-                              <th className="product-thumbnail">Product</th>
-                              <th className="product-price">Price</th>
-                              <th className="product-quantity">Quantity</th>
-                              <th className="product-subtotal">Subtotal</th>
-                              <th className="product-remove">&nbsp;</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="cart-item">
-                              <td className="product-thumbnail">
-                                <a href="shop-details.html">
-                                  <img
-                                    width={600}
-                                    height={600}
-                                    src="media/product/3.jpg"
-                                    className="product-image"
-                                    alt=""
-                                  />
-                                </a>
-                                <div className="product-name">
-                                  <a href="shop-details.html">Twin Hoops</a>
-                                </div>
-                              </td>
-                              <td className="product-price">
-                                <span className="price">$150.00</span>
-                              </td>
-                              <td className="product-quantity">
-                                <div className="quantity">
-                                  <button type="button" className="minus">
-                                    -
-                                  </button>
-                                  <input
-                                    type="number"
-                                    className="qty"
-                                    step={1}
-                                    min={0}
-                                    max=""
-                                    name="quantity"
-                                    defaultValue={2}
-                                    title="Qty"
-                                    size={4}
-                                    placeholder=""
-                                    inputMode="numeric"
-                                    autoComplete="off"
-                                  />
-                                  <button type="button" className="plus">
-                                    +
-                                  </button>
-                                </div>
-                              </td>
-                              <td className="product-subtotal">
-                                <span>$300.00</span>
-                              </td>
-                              <td className="product-remove">
-                                <a href="#" className="remove">
-                                  ×
-                                </a>
-                              </td>
-                            </tr>
-                         
-                            <tr>
-                              <td colSpan={6} className="actions">
-                                <div className="bottom-cart">
-                                  <div className="coupon">
-                                  
-                                  </div>
-                                  <h2>
-                                    <a href="shop-grid-left.html">
-                                      Continue Shopping
-                                    </a>
-                                  </h2>
-                                 
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </form>
+const ViewCard = () => {
+  const [cartItems, setCartItems] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  console.log("cartItems",cartItems)
+  useEffect(() => {
+    axios.get('http://localhost:6001/api/v1/getCard')
+      .then(response => {
+        setCartItems(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+  
+  const handleIncrement = (index) => {
+    const newCartItems = [...cartItems];
+    newCartItems[index].quantity++;
+    setCartItems(newCartItems);
+  };
+
+  const handleDecrement = (index) => {
+    const newCartItems = [...cartItems];
+    if (newCartItems[index].quantity > 1) {
+      newCartItems[index].quantity--;
+      setCartItems(newCartItems);
+    }
+  };
+  useEffect(() => {
+    // Calculate subtotal when cartItems change
+    let total = 0;
+    cartItems.forEach(item => {
+      total += item.productData.sellPrice * item.quantity;
+    });
+    setSubtotal(total);
+  }, [cartItems]);
+  const handleDelete = async (itemId) => {
+    try {
+      await axios.delete(`http://localhost:6001/api/v1/deleteCartItem/${itemId}`);
+      // Filter out the deleted item from the cartItems state
+      setCartItems(cartItems.filter(item => item._id !== itemId));
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+  return (
+    <div className="h-screen bg-gray-100 pt-20">
+      <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+      <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
+        <div className="rounded-lg md:w-2/3">
+        {cartItems.map((item, index) => (
+            <div key={item._id} className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+              <img
+                src={`http://localhost:6001/uploads/${item.productData.images[0]}`}
+                alt="product-image"
+                className="w-full rounded-lg sm:w-40"
+              />
+              <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+                <div className="mt-5 sm:mt-0">
+                <h2 className=" font-bold text-gray-900">{item.productData?.shape || item.productData?.name}</h2>
+                  <p className="mt-1 text-xs text-gray-700">{item.size || item?.sizes}</p>
+                </div>
+                <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                  <div className="flex items-center border-gray-100">
+                  <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 mr-2 duration-100 hover:bg-blue-500 hover:text-blue-50" onClick={() => handleDecrement(index)}>
+                      {" "}
+                      -{" "}
+                    </span>
+                    <span>{item.quantity}</span>
+                    <span className="cursor-pointer rounded-r bg-gray-100 py-1 ml-2 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50" onClick={() => handleIncrement(index)}>
+                      {" "}
+                      +{" "}
+                    </span>
                   </div>
-                  <div className="col-xl-4 col-lg-12 col-md-12 col-12">
-                    <div className="cart-totals">
-                      <h2>Cart totals</h2>
-                      <div>
-                        <div className="cart-subtotal">
-                          <div className="title">Subtotal</div>
-                          <div>
-                            <span>$480.00</span>
-                          </div>
-                        </div>
-                        <div className="shipping-totals">
-                          <div className="title">Shipping</div>
-                          <div>
-                            <ul className="shipping-methods custom-radio">
-                              <li>
-                                <input
-                                  type="radio"
-                                  name="shipping_method"
-                                  data-index={0}
-                                  defaultValue="free_shipping"
-                                  className="shipping_method"
-                                  defaultChecked="checked"
-                                />
-                                <label>Free shipping</label>
-                              </li>
-                              <li>
-                                <input
-                                  type="radio"
-                                  name="shipping_method"
-                                  data-index={0}
-                                  defaultValue="flat_rate"
-                                  className="shipping_method"
-                                />
-                                <label>Flat rate</label>
-                              </li>
-                            </ul>
-                            <p className="shipping-desc">
-                              Shipping options will be updated during checkout.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="order-total">
-                          <div className="title">Total</div>
-                          <div>
-                            <span>$480.00</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="proceed-to-checkout">
-                        <a
-                          href="shop-checkout.html"
-                          className="checkout-button button"
-                        >
-                          Proceed to checkout
-                        </a>
-                      </div>
-                    </div>
+                  <div className="flex items-center space-x-4">
+                    <p className="text-xl ">SellPrice: {item.productData.sellPrice } </p>
+                    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
+        onClick={() => handleDelete(item._id)}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
                   </div>
                 </div>
               </div>
-              <div className="shop-cart-empty">
-                <div className="notices-wrapper">
-                  <p className="cart-empty">Your cart is currently empty.</p>
-                </div>
-                <div className="return-to-shop">
-                  <a className="button" href="shop-grid-left.html">
-                    Return to shop
-                  </a>
-                </div>
-              </div>
+            </div>
+        ))}
+        </div>
+        <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
+          <div className="mb-2 flex justify-between">
+            <p className="text-gray-700">Subtotal</p>
+            <p className="text-gray-700">${subtotal.toFixed(2)}</p>
+          </div>
+          
+          <hr className="my-4" />
+          <div className="flex justify-between">
+            <p className="text-lg font-bold">Total</p>
+            <div className="">
+              <p className="text-sm text-gray-700">{subtotal.toFixed(2)}</p>
             </div>
           </div>
+          <button className="mt-6 w-full rounded-md text-white  py-1.5 font-medium  " style={{ backgroundColor: '#CB8161' }}>
+            Check out
+          </button>
         </div>
-        {/* #content */}
       </div>
-      {/* #primary */}
     </div>
-    {/* #main-content */}
-  </div>
-</div>
-
-</>
-
-    </>)
-}
+  );
+};
 
 export default ViewCard;

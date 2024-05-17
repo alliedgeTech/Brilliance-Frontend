@@ -6,6 +6,7 @@ import App from './App';
 import { ProSidebarProvider } from "react-pro-sidebar";
 import  store  from './redux/store'; // Import persistor
 import { Provider } from 'react-redux';
+
 // Import from 'redux-persist'
 ReactDOM.render(
   <BrowserRouter>
@@ -14,7 +15,9 @@ ReactDOM.render(
       <ProSidebarProvider>
       
       <Provider store={store}>
+     
       <App />
+     
       </Provider>
    
       </ProSidebarProvider>

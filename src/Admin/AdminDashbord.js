@@ -12,6 +12,7 @@ import ListCatogaryDiomand from "./ListCatogaryDiomand.jsx"
 import AddRing from "./AddRing.jsx"
 import ListRing from "./ListRing.jsx"
 import ListRingItem from "./ListRingCatogary.jsx"
+import AddFullEing from "./AddFullRing.jsx"
 function AdminDashboard() {
   const location = useLocation();
   const path = location.pathname;
@@ -48,6 +49,9 @@ function AdminDashboard() {
     }
     if (path === '/AdminDash/ListRingCatogary') {
       return <ListRingItem />;
+    }
+    if (path === '/AdminDash/FullRing') {
+      return <AddFullEing />;
     }
     return null;
   };

@@ -33,6 +33,8 @@ import AddRing from "./Admin/AddRing.jsx"
 import SingleProduct from './page/Diomand/SingleProduct.jsx';
 import ListRing from "./Admin/ListRing.jsx"
 import ListRingItem from "./Admin/ListRingCatogary.jsx"
+import SingleRing from './page/Diomand/Ring/SingleProductRing.jsx';
+import AddFullRing from "./Admin/AddFullRing.jsx"
 
 function App() {
 
@@ -47,6 +49,7 @@ function App() {
         <Route path='/shop' element={<Shop />} />
         <Route path='/Diomand' element={<DaymandSherch />} />
         <Route path='/single/:id' element={<SingleProduct />} />
+        <Route path='/singleRing/:id' element={<SingleRing />} />
         <Route path='/Engagement' element={<RingSherch />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/register' element={<Register />} />
@@ -76,6 +79,7 @@ function App() {
           <Route path='AddRing' element={<AddRing />} />
           <Route path='ListRing' element={<ListRing />} />
           <Route path='ListRingCatogary' element={<ListRingItem />} />
+          <Route path='FullRing' element={<AddFullRing />} />
         </Route>
       </Routes>
       {isNotAdminDash && <Footer />}
