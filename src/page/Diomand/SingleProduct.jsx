@@ -7,6 +7,7 @@ const ProductPage = () => {
   const [data, setData] = useState("");
   const [selectedColor, setSelectedColor] = useState("gold");
   const [quantity, setQuantity] = useState(1);
+  
   const { id } = useParams();
   const [mainImage, setMainImage] = useState("");
   console.log("mainImage", mainImage);
@@ -27,7 +28,23 @@ const ProductPage = () => {
     };
     fetchData();
   }, [id]);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:6001/api/v1/getRing/${id}`
+        );
+        console.log(response.data.data);
+        setData(response.data.data);
+        setMainImage(
+          `http://localhost:6001/uploads/${response.data.data.images[0]}`
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [id]);
   const handleImageClick = (newImage) => {
     setMainImage(newImage);
   };
@@ -47,7 +64,8 @@ const ProductPage = () => {
     console.log("data._id", data._id)
     try {
       await axios.post('http://localhost:6001/api/v1/addToWishlist', {
-        ProductData: data
+        ProductData: data,
+        RingData:data
         // userId: 'user_id' 
       });
       alert('Item added to wishlist successfully!');

@@ -6,14 +6,14 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [manues, setManues] = useState([]);
-  const [subManues,setSubManues] =  useState([]);
-  // const [ManyManues,setManyManues]=useState([])
+  const [subManues, setSubManues] = useState([]);
+  const [manyManues, setManyManues] = useState([]);
   const [showLoginBox, setShowLoginBox] = useState(true);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const auth = JSON.parse(localStorage.getItem("auth"));
   const [activeSubmenu, setActiveSubmenu] = useState(null);
- 
+
   const handleMouseEnter = (id) => {
     setActiveSubmenu(id);
   };
@@ -21,92 +21,83 @@ function App() {
   const handleMouseLeave = () => {
     setActiveSubmenu(null);
   };
+
   const handleLogout = () => {
     localStorage.clear();
     localStorage.clear("persist:root");
     navigate("/login");
   };
-  // const menuItems = manues.map((item) => {
-  //   const submenuLogic = subManues
-  // .filter((subItem) => subItem.mainMenuId._id === item._id) 
-  // .map((subItem) => (
-  //   <li key={subItem._id} className="submenu-item">
-  //     <Link to={subItem.link}>{subItem.name}</Link>
-  //   </li>
-  // ));
-  //   console.log("submenuLogic:", submenuLogic);
-    
-  // });
- 
- 
+
   useEffect(() => {
     setShowLoginBox(location.pathname !== '/forgot');
   }, [location.pathname]);
 
   useEffect(() => {
-    const fetchMenues = async () => {
+    const fetchMenus = async () => {
       try {
-        const response = await axios.get("http://localhost:6001/api/v1/getManues", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setManues(response.data);
+        const [manuesRes, subManuesRes, manyManuesRes] = await Promise.all([
+          axios.get("http://localhost:6001/api/v1/getManues"),
+          axios.get("http://localhost:6001/api/v1/getSubmanues"),
+          axios.get("http://localhost:6001/api/v1/getSubmanuesMany")
+        ]);
+        setManues(manuesRes.data);
+        setSubManues(subManuesRes.data);
+        setManyManues(manyManuesRes.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-
-    fetchMenues();
+    fetchMenus();
   }, []);
- useEffect(() => {
-    const fetchMenues1 = async () => {
-      try {
-        const response = await axios.get("http://localhost:6001/api/v1/getSubmanues", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setSubManues(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    
 
-    fetchMenues1();
-  }, []);
-  // useEffect(() => {
-  //   const fetchMenues = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:6001/api/v1/getSubmanuesMany", {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-  //       setManyManues(response.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  const menuItems = manues.map((menuItem) => {
+    const submenuItems = subManues.filter(subItem => subItem.mainMenuId._id === menuItem._id)
+      .map((subItem) => (
+        <li key={subItem._id} className="submenu-item">
+          <Link to={subItem.link}>{subItem.name}</Link>
+        </li>
+      ));
 
+    const nestedSubmenuItems = submenuItems.flatMap(submenuItem => {
+      const nestedItems = manyManues.filter(nestedItem => nestedItem.subMenuId._id === submenuItem.key)
+        .map((nestedItem) => (
+          <li key={nestedItem.link}>
+            <Link to={nestedItem.link}>{nestedItem.name}</Link>
+          </li>
+        ));
+      return nestedItems;
+    });
 
-  //   fetchMenues();
-  // }, []);
-  
+    return (
+      <li key={menuItem._id} className={`level-0 menu-item menu-item-has-children ${activeSubmenu === menuItem._id ? 'current-menu-item' : ''}`}
+        onMouseEnter={() => handleMouseEnter(menuItem._id)}
+        onMouseLeave={handleMouseLeave}
+        style={{ position: 'relative' }}
+      >
+        <Link to={menuItem.name} className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          {menuItem.name}
+        </Link>
+        {activeSubmenu === menuItem._id && subManues && subManues.length > 0 && (
+          <ul className="submenu text-xl bg-gray-200 bg-opacity-75 text-white absolute left-0 mt-2 w-full px-0" style={{ width: "300px" }}>
+            {submenuItems}
+            {nestedSubmenuItems}
+          </ul>
+        )}
+      </li>
+    );
+  });
+
   return (
     <>
       <header id="site-header" className="site-header header-v3">
         <div className="header-desktop">
           <div className="header-top">
-            {/* Header content */}
             <div className="section-padding">
               <div className="section-container large p-l-r">
                 <div className="row">
                   <div className="col-xl-2 col-lg-4 col-md-12 col-sm-12 col-12 header-left">
                     <div className="header-page-link">
-                      {/* Search */}
                       <div className="search-box">
                         <div className="search-toggle">
                           <i className="icon-search" />
@@ -121,7 +112,6 @@ function App() {
                   </div>
                   <div className="col-xl-2 col-lg-4 col-md-12 col-sm-12 col-12 header-right">
                     <div className="header-page-link">
-                      {/* Login */}
                       {auth ? (
                         <button
                           onClick={handleLogout}
@@ -130,23 +120,18 @@ function App() {
                           Logout
                         </button>
                       ) : (
-                        <>
-                          <div className="wishlist-box">
-                            <Link to="/login">
-                              <i className="icon-user" />
-                            </Link>
-                          </div>
-                        </>
+                        <div className="wishlist-box">
+                          <Link to="/login">
+                            <i className="icon-user" />
+                          </Link>
+                        </div>
                       )}
-
-                      {/* Wishlist */}
                       <div className="wishlist-box">
                         <Link to="/wishlist">
                           <i className="icon-heart" />
                         </Link>
                         <span className="count-wishlist">1</span>
                       </div>
-                      {/* Cart */}
                       <div className="wishlist-box">
                         <Link to="/viewcard">
                           <i className="icon-large-paper-bag" />
@@ -160,63 +145,16 @@ function App() {
             </div>
           </div>
           <div className="header-middle text-center color-white">
-            {/* Navigation */}
             <div className="site-navigation">
-            <nav id="main-navigation">
-  <ul id="menu-main-menu" className="menu">
-    {manues.map((item) => (
-      <li
-        key={item.id}
-        className={`level-0 menu-item menu-item-has-children ${
-          activeSubmenu === item._id ? 'current-menu-item' : ''
-        }`}
-        onMouseEnter={() => handleMouseEnter(item._id)}
-        onMouseLeave={handleMouseLeave}
-        style={{ position: 'relative' }} // Add relative positioning
-      >
-        <Link
-          to={item.name}
-          className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
-        >
-          {item.name}
-        </Link>
-        {activeSubmenu === item._id && subManues && subManues.length > 0 && (
-       <ul className="submenu text-xl bg-gray-200 bg-opacity-75 text-white absolute left-0 mt-2 w-full px-0" style={{ width: "300px" }}>
-       {/* Adjust width and remove padding */}
-         {/* Render regular submenu items */}
-         {subManues
-           .filter((subItem) => subItem.mainMenuId._id === item._id)
-           .map((subItem) => (
-             <li key={subItem.id} className="submenu-item">
-               <Link to={subItem.link}>{subItem.name}</Link>
-             </li>
-           ))}
-         {/* Render submenu items from ManyManues */}
-         {/* {ManyManues
-           .filter((subMany) => subMany.subMenuId._id === item._id)
-           .map((subMany) => (
-             subMany.SubMenuItems.map((subitemMany) => (
-               <li key={subitemMany.id} className="submenu-item">
-                 <Link to={subitemMany.link}>{subitemMany.name}</Link>
-               </li>
-             ))
-           ))} */}
-       </ul>
-        )}
-      </li>
-    ))}
-  </ul>
-</nav>
-
-
-</div>
-
+              <nav id="main-navigation">
+                <ul id="menu-main-menu" className="menu">
+                  {menuItems}
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
-
-        {/* Wishlist and User menu icons */}
-        <div className="md:hidden fixed bottom-0 right-0 z-50 p-4">
-          {/* Wishlist icon */}
+        <div className="md:hidden fixed bottom-0 right-0 z-50 p-4 ">
           <div className="relative inline-block">
             <button onClick={() => setShowWishlist(!showWishlist)} className="text-white">
               <i className="icon-heart" />
@@ -227,8 +165,6 @@ function App() {
               </div>
             )}
           </div>
-
-          {/* User menu icon */}
           <div className="relative inline-block ml-4">
             <button onClick={() => setShowUserMenu(!showUserMenu)} className="text-white">
               <i className="icon-user" />

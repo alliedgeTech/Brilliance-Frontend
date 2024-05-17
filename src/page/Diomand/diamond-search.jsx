@@ -13,18 +13,14 @@ function Shop() {
    const [recentlyViewClicked, setRecentlyViewClicked] = useState(false);
    const [page, setPage] = useState(1);
    const [recentlyViewed, setRecentlyViewed] = useState([]);
-   
    const [CompareView, seteCompareView] = useState([]);
    const [showHello, setShowHello] = useState(false); 
    
-   
-   console.log("CompareView",CompareView)
+  
    const handleDiamondClick = (name) => {
       setSelectedDiamond(name);
   };
-  
-  console.log(selectedDiamond)
-  
+
   const fetchData = async () => {
      try {
         const response = await axios.get(
@@ -37,12 +33,12 @@ function Shop() {
      }
   };
   
-  // Fetch data when page or filters change
+  
   useEffect(() => {
      fetchData();
   }, [page, selectedClarity, selectedCut]);
   
-  // Function to detect scroll to bottom of page
+  
   const handleScroll = () => {
      const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
      const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
@@ -50,7 +46,7 @@ function Shop() {
      const scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
   
      if (scrolledToBottom) {
-        // Increment page number to fetch next set of products
+       
         setPage(prevPage => prevPage + 1);
      }
   };

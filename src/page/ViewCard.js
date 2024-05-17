@@ -90,93 +90,19 @@ function ViewCard(){
                                 </a>
                               </td>
                             </tr>
-                            <tr className="cart-item">
-                              <td className="product-thumbnail">
-                                <a href="shop-details.html">
-                                  <img
-                                    width={600}
-                                    height={600}
-                                    src="media/product/1.jpg"
-                                    className="product-image"
-                                    alt=""
-                                  />
-                                </a>
-                                <div className="product-name">
-                                  <a href="shop-details.html">
-                                    Medium Flat Hoops
-                                  </a>
-                                </div>
-                              </td>
-                              <td className="product-price">
-                                <span>$180.00</span>
-                              </td>
-                              <td className="product-quantity">
-                                <div className="quantity">
-                                  <button type="button" className="minus">
-                                    -
-                                  </button>
-                                  <input
-                                    type="number"
-                                    className="qty"
-                                    step={1}
-                                    min={0}
-                                    max=""
-                                    name="quantity"
-                                    defaultValue={1}
-                                    title="Qty"
-                                    size={4}
-                                    placeholder=""
-                                    inputMode="numeric"
-                                    autoComplete="off"
-                                  />
-                                  <button type="button" className="plus">
-                                    +
-                                  </button>
-                                </div>
-                              </td>
-                              <td className="product-subtotal">
-                                <span className="price">$180.00</span>
-                              </td>
-                              <td className="product-remove">
-                                <a href="#" className="remove">
-                                  ×
-                                </a>
-                              </td>
-                            </tr>
+                         
                             <tr>
                               <td colSpan={6} className="actions">
                                 <div className="bottom-cart">
                                   <div className="coupon">
-                                    <input
-                                      type="text"
-                                      name="coupon_code"
-                                      className="input-text"
-                                      id="coupon-code"
-                                      defaultValue=""
-                                      placeholder="Coupon code"
-                                    />
-                                    <button
-                                      type="submit"
-                                      name="apply_coupon"
-                                      className="button"
-                                      value="Apply coupon"
-                                    >
-                                      Apply coupon
-                                    </button>
+                                  
                                   </div>
                                   <h2>
                                     <a href="shop-grid-left.html">
                                       Continue Shopping
                                     </a>
                                   </h2>
-                                  <button
-                                    type="submit"
-                                    name="update_cart"
-                                    className="button"
-                                    value="Update cart"
-                                  >
-                                    Update cart
-                                  </button>
+                                 
                                 </div>
                               </td>
                             </tr>
