@@ -11,17 +11,17 @@ import AdminDash from "./Admin/AdminDashbord";
 import Bracelet from './page/Products/Bracelet';
 import Earring from './page/Products/Earring';
 import Necklace from './page/Products/Necklace';
-import Ring from './page/Products/Ring';
+
 import Diomand from "./Admin/Diomand.jsx"
 import Forgot from './Header/Forgot';
-
+import Ring from "./page/Diomand/Ring/Ring.jsx"
 import OTP from './Header/Otp';
 import ListCatogaryDiomand from "./Admin/ListCatogaryDiomand"
 import NewPassword from "./Header/New-Password.jsx"
 import AddProduct from "./Admin/AddProduct";
 import AddCatogary from "./Admin/AddCatogary"
 import DaymandSherch from "./page/Diomand/diamond-search.jsx"
-
+import RingSherch from './page/Diomand/Ring/Ring.jsx';
 
 import ListCatogary from "./Admin/ListCatogary"
 import Addmanues from "./Admin/Addmanues"
@@ -29,10 +29,12 @@ import AddSlider from './Admin/AddSlider';
 import Login from './Header/Auth/Login.jsx';
 import Register from './Header/Auth/Register.jsx';
 import Otp from "./Header/Auth/verifyOtp.jsx"
-
+import AddRing from "./Admin/AddRing.jsx"
 import SingleProduct from './page/Diomand/SingleProduct.jsx';
-
-
+import ListRing from "./Admin/ListRing.jsx"
+import ListRingItem from "./Admin/ListRingCatogary.jsx"
+import SingleRing from './page/Diomand/Ring/SingleProductRing.jsx';
+import AddFullRing from "./Admin/AddFullRing.jsx"
 
 function App() {
 
@@ -45,8 +47,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/shop' element={<Shop />} />
-        <Route path='/DaymandSherch' element={<DaymandSherch />} />
+        <Route path='/Diomand' element={<DaymandSherch />} />
         <Route path='/single/:id' element={<SingleProduct />} />
+        <Route path='/singleRing/:id' element={<SingleRing />} />
+        <Route path='/Engagement' element={<RingSherch />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/OtpVerify' element={<Otp />} />
@@ -72,7 +76,10 @@ function App() {
           <Route path='AddSlider' element={<AddSlider />} />
           <Route path='Diomand' element={<Diomand />} />
           <Route path='ListDiomandCatogary' element={<ListCatogaryDiomand />} />
-      
+          <Route path='AddRing' element={<AddRing />} />
+          <Route path='ListRing' element={<ListRing />} />
+          <Route path='ListRingCatogary' element={<ListRingItem />} />
+          <Route path='FullRing' element={<AddFullRing />} />
         </Route>
       </Routes>
       {isNotAdminDash && <Footer />}
