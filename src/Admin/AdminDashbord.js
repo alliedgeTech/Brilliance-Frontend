@@ -9,6 +9,10 @@ import Addmanues from "./Addmanues.jsx"
 import AddSlider from "./AddSlider.jsx"
 import Diomand from "./Diomand.jsx"
 import ListCatogaryDiomand from "./ListCatogaryDiomand.jsx"
+import AddRing from "./AddRing.jsx"
+import ListRing from "./ListRing.jsx"
+import ListRingItem from "./ListRingCatogary.jsx"
+import AddFullEing from "./AddFullRing.jsx"
 function AdminDashboard() {
   const location = useLocation();
   const path = location.pathname;
@@ -37,6 +41,17 @@ function AdminDashboard() {
     }
     if (path === '/AdminDash/ListDiomandCatogary') {
       return <ListCatogaryDiomand />;
+    }   if (path === '/AdminDash/AddRing') {
+      return <AddRing />;
+    }
+    if (path === '/AdminDash/ListRing') {
+      return <ListRing />;
+    }
+    if (path === '/AdminDash/ListRingCatogary') {
+      return <ListRingItem />;
+    }
+    if (path === '/AdminDash/FullRing') {
+      return <AddFullEing />;
     }
     return null;
   };

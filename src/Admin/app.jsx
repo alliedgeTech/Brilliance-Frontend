@@ -24,11 +24,15 @@ const App = () => {
               <MenuItem component={<Link to="/AdminDash/Diomand" />}>Add Diomand </MenuItem>
               <MenuItem component={<Link to="/AdminDash/ListProduct" />}>List AllDiomand </MenuItem>
               <MenuItem component={<Link to="/AdminDash/ListDiomandCatogary" />}>List DiomandCatogary </MenuItem> 
-              
+              <MenuItem component={<Link to="/AdminDash/AddRing" />}>Add Ring </MenuItem>
+              <MenuItem component={<Link to="/AdminDash/ListRing" />}>List Ring </MenuItem>
+              <MenuItem component={<Link to="/AdminDash/FullRing" />}>Add FullRing </MenuItem>
             </SubMenu>
             <SubMenu label="Catogary">
             <MenuItem component={<Link to="/AdminDash/AddCatogary" />}>Add Catogary   </MenuItem>
             <MenuItem component={<Link to="/AdminDash/ListCatogary" />}>ListCatogary  </MenuItem>
+            
+            <MenuItem component={<Link to="/AdminDash/ListRingCatogary" />}>ListRingCatogary  </MenuItem>
             
             </SubMenu>
             <SubMenu label="Manues & Slider">
