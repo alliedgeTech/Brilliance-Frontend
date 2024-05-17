@@ -1,21 +1,22 @@
 import React, { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for making HTTP requests
+import CallFor from '../API/CallFor';
+import ApiList from '../API/AllApiList';
+
 
 function Forgot() {
   const emailRef = useRef(null);
   const navigate = useNavigate();
-
+  const {forgotPassword} = ApiList;
   const handleNextClick = async () => {
     const email = emailRef.current.value;
     if (!email.trim()) {
       alert('Please enter your email.');
     } else {
       try {
-        // Make an HTTP POST request to your backend endpoint
-        const response = await axios.post('http://localhost:6001/api/v1/forgot-password', { email });
+        // Make an HTTP POST request to your backend endpoint using CallFor method
+        const response = await CallFor(forgotPassword, 'POST', { email });
         
-      
         if (response.status === 200) {
           navigate('/otp');
         } else {
@@ -39,7 +40,7 @@ function Forgot() {
         <label htmlFor="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="Enter your email" ref={emailRef} />
       </div>
-      <button type="button"  style={{ backgroundColor: '#CB8161' }} onClick={handleNextClick}>Next</button>
+      <button type="button" style={{ backgroundColor: '#CB8161' }} onClick={handleNextClick}>Next</button>
     </div>
   );
 }
