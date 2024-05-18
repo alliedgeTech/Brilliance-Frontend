@@ -1,13 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import ApiList from '../API/AllApiList';
+import CallFor from '../API/CallFor';
 
 function NewPassword() {
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-
+  const {resetPassword} = ApiList;
   const handleResetPassword = async () => {
     const password = passwordRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
@@ -23,24 +24,17 @@ function NewPassword() {
     }
 
     try {
-      // Make an HTTP POST request to your backend endpoint to update the password
-      const response = await axios.post('yhttp://localhost:6001/api/v1/reset-password', {
+      const response = await CallFor(resetPassword, 'POST', {
         password,
         confirmPassword,
       });
 
-      // Assuming the backend returns a success message or status code
-      if (response.status === 200) {
-        // Redirect to login page or any other page
+      if (response) {
         navigate('/login');
       } else {
-        // Handle other possible response statuses or error cases
-        console.error('Unexpected response:', response);
         setError('Failed to reset password. Please try again.');
       }
     } catch (error) {
-      // Handle any errors that occur during the request
-      console.error('Error sending request:', error);
       setError('An error occurred. Please try again later.');
     }
   };
