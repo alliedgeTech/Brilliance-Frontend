@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import CallFor from "../../API/CallFor"; 
+import ApiList from "../../API/AllApiList"; 
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
+  const { register, handleSubmit } = useForm();
+  const { registerApi, verifyOTPApi } = ApiList;
   const [error, setError] = useState('');
-  const [otpSent, setOtpSent] = useState(false); // Add state for OTP sent status
+  const [otpSent, setOtpSent] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    const { email, password, otp } = data;
+    const requestBody = { email, password };
 
     try {
-      const response = await axios.post('http://localhost:6001/api/v1/register', { email, password });
+      const response = await CallFor(registerApi, 'POST', JSON.stringify(requestBody), 'withoutAuth');
 
       if (response.data.otpSent) {
-        setOtpSent(true); // Update OTP sent status
+        setOtpSent(true);
         setError('');
       } else {
         setError('Email already exists');
@@ -25,9 +27,12 @@ const RegisterForm = () => {
     }
   };
 
-  const handleVerifyOtp = async () => {
+  const handleVerifyOtp = async (data) => {
+    const { email, otp } = data;
+    const requestBody = { email, otp };
+
     try {
-      const response = await axios.post('http://localhost:6001/api/v1/verifyOTP', { email, otp });
+      const response = await CallFor(verifyOTPApi, 'POST', JSON.stringify(requestBody), 'withoutAuth');
 
       if (response.data.success) {
         setError('');
@@ -40,50 +45,34 @@ const RegisterForm = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:"20px",marginBottom:"20px" }} classnName="mb-12"  >
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "20px", marginBottom: "20px" }} className="mb-12">
       <div style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
         <h2>Register</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label>
             Email:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <input type="email" {...register('email')} />
           </label>
           <br />
           <label>
             Password:
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input type="password" {...register('password')} />
           </label>
           <br />
           <button type="submit" style={{ backgroundColor: '#CB8161', color: '#fff', border: 'none', padding: '4px 16px', borderRadius: '4px', cursor: 'pointer' }}>Submit</button>
         </form>
-        {error && <div style={{ color: 'red', marginTop: '10px', marginBottom: '10px'  }}>{error}</div>}
+        {error && <div style={{ color: 'red', marginTop: '10px', marginBottom: '10px' }}>{error}</div>}
         {otpSent && (
-  <div>
-    <div style={{ marginTop: '20px' }} > {/* Add margin to OTP input */}
-      <label>
-        OTP:
-        <input
-          type="text"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-        />
-      </label>
-    </div>
-    <div style={{ marginTop: '10px' }}> {/* Add margin to error message */}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-    </div>
-    <button onClick={handleVerifyOtp} style={{ backgroundColor: '#CB8161', color: '#fff', border: 'none', padding: '8px 8px', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px' }}>Verify OTP</button>
-  </div>
-)}
-
+          <form onSubmit={handleSubmit(handleVerifyOtp)}>
+            <div style={{ marginTop: '20px' }}>
+              <label>
+                OTP:
+                <input type="text" {...register('otp')} />
+              </label>
+            </div>
+            <button type="submit" style={{ backgroundColor: '#CB8161', color: '#fff', border: 'none', padding: '8px 8px', borderRadius: '4px', cursor: 'pointer', marginLeft: '10px' }}>Verify OTP</button>
+          </form>
+        )}
       </div>
     </div>
   );
